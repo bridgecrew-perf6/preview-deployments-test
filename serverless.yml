@@ -1,15 +1,16 @@
-org: yourorg
+org: yongchen45
 app: preview-deployments
 service: serverlessjams
 
-frameworkVersion: ">=1.53.0 <2.0.0"
+# frameworkVersion: ">=1.53.0 <2.0.0"
 
 provider:
   name: aws
   runtime: python3.7
   region: us-east-1
   environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    # DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    DYNAMODB_TABLE: serverlessjams-dev
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -17,7 +18,8 @@ provider:
         - dynamodb:Scan
         - dynamodb:PutItem
         - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+      #Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+      Resource: "arn:aws:dynamodb:us-east1:*:table/serverlessjams-dev"
     - Effect: Allow
       Action:
         - sns:Publish
@@ -50,7 +52,8 @@ resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        #TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        TableName: serverlessjams-dev
         AttributeDefinitions:
           - AttributeName: pk
             AttributeType: S
